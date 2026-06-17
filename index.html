@@ -1,13 +1,626 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>my-portfolio</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Warren Ciar · Portfolio</title>
+  <!-- Bootstrap 5 + Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+  <!-- Inter Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+  <style>
+    * { font-family: 'Inter', sans-serif; }
+    body { background: #f5f7fb; }
+
+    /* cards & containers */
+    .portfolio-card {
+      background: #ffffff;
+      border-radius: 2rem;
+      box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.06);
+      padding: 2.5rem 2rem;
+      transition: box-shadow 0.2s ease, transform 0.15s ease;
+      border: 1px solid rgba(255,255,255,0.5);
+      backdrop-filter: blur(2px);
+    }
+    .portfolio-card:hover {
+      box-shadow: 0 24px 48px -16px rgba(79, 70, 229, 0.12);
+      transform: translateY(-3px);
+    }
+
+    .section-title {
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      border-bottom: 3px solid #eef2f6;
+      padding-bottom: 0.7rem;
+      margin-bottom: 1.8rem;
+      color: #0b1a33;
+    }
+    .section-title i {
+      color: #4f46e5;
+      margin-right: 10px;
+    }
+
+    /* profile image */
+    .profile-pic {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid #ffffff;
+      box-shadow: 0 12px 28px -10px rgba(79, 70, 229, 0.20);
+      background: #eef2ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.2rem;
+      font-size: 3rem;
+      color: #4f46e5;
+      transition: 0.2s;
+      overflow: hidden;
+    }
+    .profile-pic img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .profile-pic .initials {
+      font-weight: 600;
+      font-size: 2.8rem;
+      color: #4f46e5;
+      letter-spacing: 1px;
+    }
+
+    /* tech badges — refined */
+    .tech-badge {
+      background: #f1f4fa;
+      padding: 0.4rem 1rem;
+      border-radius: 40px;
+      font-weight: 500;
+      font-size: 0.85rem;
+      color: #1a2a4a;
+      transition: all 0.15s;
+      border: 1px solid transparent;
+      letter-spacing: -0.01em;
+    }
+    .tech-badge i {
+      margin-right: 6px;
+      color: #4f46e5;
+      width: 1.1rem;
+      text-align: center;
+    }
+    .tech-badge:hover {
+      background: #e9edf6;
+      border-color: #c7d2fe;
+      transform: scale(1.02);
+    }
+    .tech-badge.basic {
+      opacity: 0.85;
+      background: #f1f4fa;
+    }
+    .tech-badge.basic i {
+      color: #6b7a9a;
+    }
+
+    /* project cards */
+    .project-item {
+      background: #ffffff;
+      border-radius: 1.5rem;
+      padding: 1.5rem 1.25rem;
+      height: 100%;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+      border: 1px solid #edf2f7;
+      transition: all 0.15s;
+    }
+    .project-item:hover {
+      border-color: #d9e2fc;
+      background: #fafcff;
+      box-shadow: 0 8px 20px -10px rgba(79, 70, 229, 0.08);
+    }
+    .project-img-placeholder {
+      background: #eef2ff;
+      border-radius: 1.25rem;
+      padding: 1.8rem 1rem;
+      text-align: center;
+      color: #4f46e5;
+      font-weight: 500;
+      border: 1px dashed #c7d2fe;
+    }
+    .project-img-placeholder i {
+      font-size: 2.2rem;
+      display: block;
+      margin-bottom: 6px;
+      color: #4f46e5;
+    }
+
+    /* buttons */
+    .btn-primary-custom {
+      background: #4f46e5;
+      border: none;
+      padding: 0.6rem 2.2rem;
+      border-radius: 100px;
+      font-weight: 500;
+      color: white;
+      transition: 0.15s;
+      box-shadow: 0 4px 10px -4px rgba(79, 70, 229, 0.3);
+    }
+    .btn-primary-custom:hover {
+      background: #4338ca;
+      color: white;
+      transform: scale(0.97);
+      box-shadow: 0 6px 14px -6px rgba(79, 70, 229, 0.4);
+    }
+    .btn-outline-secondary-custom {
+      border: 1px solid #d0d8e8;
+      background: transparent;
+      padding: 0.6rem 2.2rem;
+      border-radius: 100px;
+      font-weight: 500;
+      color: #1f2a44;
+      transition: 0.15s;
+    }
+    .btn-outline-secondary-custom:hover {
+      background: #f1f4fa;
+      border-color: #a0b0cc;
+      color: #0b1a33;
+    }
+
+    /* contact form */
+    .contact-form .form-control {
+      border-radius: 100px;
+      padding: 0.7rem 1.4rem;
+      border: 1px solid #e2e8f0;
+      background: #fafcff;
+      font-size: 0.95rem;
+    }
+    .contact-form .form-control:focus {
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.12);
+    }
+    .contact-form textarea.form-control {
+      border-radius: 1.25rem;
+    }
+
+    .footer-social a {
+      color: #4a5a7a;
+      margin: 0 12px;
+      font-size: 1.25rem;
+      transition: 0.15s;
+    }
+    .footer-social a:hover { color: #4f46e5; transform: translateY(-2px); }
+
+    /* humble note */
+    .humble-note {
+      background: #f8faff;
+      border-radius: 2rem;
+      padding: 0.8rem 1.8rem;
+      display: inline-block;
+      border: 1px solid #e9eefa;
+      color: #2d3a5a;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 576px) {
+      .portfolio-card { padding: 1.75rem 1.25rem; }
+      .profile-pic { width: 110px; height: 110px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container py-5">
+
+  <!-- ========== INTRO · professional & humble ========== -->
+  <div class="row justify-content-center mb-5">
+    <div class="col-lg-10">
+      <div class="portfolio-card text-center">
+
+        <!-- Profile image (replace 'ren.jpg' with your own) -->
+        <div class="profile-pic">
+          <img src="{{ asset('images/my_images/ren.jpg') }}" alt="Warren Ciar" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'initials\'>WC</span>';">
+        </div>
+
+        <h1 class="display-5 fw-semibold mb-1" style="color: #0b1a33;">Warren Ciar</h1>
+        <p class="text-muted fs-6 mb-3" style="letter-spacing: 0.3px;">
+          <i class="fas fa-map-pin me-1" style="color: #4f46e5;"></i> Cavite, PH · 
+          <span class="fw-medium">Full‑stack developer</span>
+        </p>
+
+        <!-- tech stack — with "basic" label for Laravel, Quasar, Vue, Node -->
+        <div class="d-flex flex-wrap justify-content-center gap-2 mb-3">
+          <span class="tech-badge"><i class="fab fa-php"></i> PHP</span>
+          <span class="tech-badge"><i class="fab fa-html5"></i> HTML</span>
+          <span class="tech-badge"><i class="fab fa-css3-alt"></i> CSS</span>
+          <span class="tech-badge"><i class="fab fa-bootstrap"></i> Bootstrap</span>
+          <span class="tech-badge"><i class="fas fa-code"></i> JavaScript</span>
+          <span class="tech-badge"><i class="fas fa-code"></i> jQuery</span>
+          <span class="tech-badge"><i class="fas fa-sync-alt"></i> Ajax</span>
+          <span class="tech-badge basic"><i class="fab fa-laravel"></i> Laravel <span style="font-weight:400; color:#6b7a9a;">· basic</span></span>
+          <span class="tech-badge basic"><i class="fas fa-cube"></i> Quasar <span style="font-weight:400; color:#6b7a9a;">· basic</span></span>
+          <span class="tech-badge basic"><i class="fab fa-vuejs"></i> Vue.js <span style="font-weight:400; color:#6b7a9a;">· basic</span></span>
+          <span class="tech-badge basic"><i class="fab fa-node-js"></i> Node.js <span style="font-weight:400; color:#6b7a9a;">· basic</span></span>
+        </div>
+
+        <!-- humble, professional statement -->
+        <p class="lead text-secondary" style="max-width: 640px; margin: 0.5rem auto 0.8rem; font-size: 1.05rem;">
+          I enjoy building web applications with Laravel, Vue, and modern tools. 
+          I'm currently deepening my skills — every project is a chance to learn and grow.
+        </p>
+
+        <div class="mt-3 d-flex flex-wrap justify-content-center gap-3">
+          <a href="#projects" class="btn btn-primary-custom"><i class="fas fa-rocket me-1"></i> See my work</a>
+          <a href="#contact" class="btn btn-outline-secondary-custom">Let's talk</a>
+        </div>
+
+        <!-- small humble badge -->
+        <div class="mt-3">
+          <span class="humble-note"><i class="fas fa-seedling me-1" style="color:#4f46e5;"></i> always learning · open to feedback</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SAMPLE PROJECTS ========== -->
+  <div id="projects" class="row justify-content-center mb-5">
+    <div class="col-lg-10">
+      <div class="portfolio-card">
+        <h3 class="section-title"><i class="fas fa-folder-open"></i> Sample Projects</h3>
+        <div class="row g-4">
+
+          <!-- Project 1 -->
+          <div class="col-md-4">
+            <div class="project-item">
+              <div class="project-img-placeholder mb-3">
+                <i class="fas fa-tasks"></i>
+                <span>MIS OPERATIONS</span>
+              </div>
+              <h5 class="fw-semibold">MIS OPERATIONS</h5>
+              <p class="text-muted small">A System that holds MIS Team Inventory with the Partner of Purchasing Team and IT Team ...</p>
+              <div class="d-flex gap-2 mt-2 flex-wrap">
+                <span class="badge bg-light text-dark border">PHP</span>
+                <span class="badge bg-light text-dark border">HTML</span>
+                <span class="badge bg-light text-dark border">CSS</span>
+								<span class="badge bg-light text-dark border">JAVASCRIPT</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 2 -->
+          <div class="col-md-4">
+            <div class="project-item">
+              <div class="project-img-placeholder mb-3">
+                <i class="fas fa-cogs"></i>
+                <span>Cargosoft Launcher</span>
+              </div>
+              <h5 class="fw-semibold">Cargosoft Launcher System</h5>
+              <p class="text-muted small">An ERP System that reflects modules for Logistics Company.</p>
+              <div class="d-flex gap-2 mt-2 flex-wrap">
+               	<span class="badge bg-light text-dark border">PHP</span>
+                <span class="badge bg-light text-dark border">HTML</span>
+                <span class="badge bg-light text-dark border">CSS</span>
+								<span class="badge bg-light text-dark border">JAVASCRIPT</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 3 -->
+          <div class="col-md-4">
+            <div class="project-item">
+              <div class="project-img-placeholder mb-3">
+                <i class="fas fa-ship"></i>
+                <span>Invoice</span>
+              </div>
+              <h5 class="fw-semibold">Invoice System</h5>
+              <p class="text-muted small">An invoice System that consist's different shipment in logistics company like Sea Freight, Air Freight, Brokerage, Trucking etc...</p>
+              <div class="d-flex gap-2 mt-2 flex-wrap">
+                <span class="badge bg-light text-dark border">PHP</span>
+                <span class="badge bg-light text-dark border">HTML</span>
+                <span class="badge bg-light text-dark border">CSS</span>
+								<span class="badge bg-light text-dark border">JAVASCRIPT</span>
+              </div>
+            </div>
+          </div>
+
+					 <!-- Project 3 -->
+          <div class="col-md-4">
+            <div class="project-item">
+              <div class="project-img-placeholder mb-3">
+                <i class="fas fa-ship"></i>
+                <span>Invoice</span>
+              </div>
+              <h5 class="fw-semibold">Invoice System</h5>
+              <p class="text-muted small">An invoice System that consist's different shipment in logistics company like Sea Freight, Air Freight, Brokerage, Trucking etc...</p>
+              <div class="d-flex gap-2 mt-2 flex-wrap">
+                <span class="badge bg-light text-dark border">PHP</span>
+                <span class="badge bg-light text-dark border">HTML</span>
+                <span class="badge bg-light text-dark border">CSS</span>
+								<span class="badge bg-light text-dark border">JAVASCRIPT</span>
+              </div>
+            </div>
+          </div>
+
+					 <!-- Project 4 -->
+          <div class="col-md-4">
+            <div class="project-item">
+              <div class="project-img-placeholder mb-3">
+                <i class="fa-solid fa-hand-holding-dollar"></i>
+                <span>OR System</span>
+              </div>
+              <h5 class="fw-semibold">Official Receipt System</h5>
+              <p class="text-muted small">An Official Receipt System that collects payment for a logistic or other payment in logistics company.</p>
+              <div class="d-flex gap-2 mt-2 flex-wrap">
+                <span class="badge bg-light text-dark border">PHP</span>
+                <span class="badge bg-light text-dark border">HTML</span>
+                <span class="badge bg-light text-dark border">CSS</span>
+								<span class="badge bg-light text-dark border">JAVASCRIPT</span>
+              </div>
+            </div>
+          </div>
+
+					 <!-- Project 3 -->
+          <div class="col-md-4">
+            <div class="project-item">
+              <div class="project-img-placeholder mb-3">
+                <i class="fas fa-users"></i>
+                <span>RTU SYSTEM</span>
+              </div>
+              <h5 class="fw-semibold">RTU System</h5>
+              <p class="text-muted small">Creating an Admin Side for Rizal Technical University - Student Thesis. The system consist an Admin and Standard User Portal...</p>
+              <div class="d-flex gap-2 mt-2 flex-wrap">
+                <span class="badge bg-light text-dark border">PHP</span>
+                <span class="badge bg-light text-dark border">HTML</span>
+                <span class="badge bg-light text-dark border">CSS</span>
+								<span class="badge bg-light text-dark border">JAVASCRIPT</span>
+								<span class="badge bg-light text-dark border">TAILWIND</span>
+              </div>
+            </div>
+          </div>
+
+					 <div class="col-md-4">
+            <div class="project-item">
+              <div class="project-img-placeholder mb-3">
+                <i class="fas fa-ticket"></i>
+                <span>Ticketing System</span>
+              </div>
+              <h5 class="fw-semibold">In-house Ticketing System</h5>
+              <p class="text-muted small">Created an In-house Ticketing System for Logistics Company to develop new technology and advance processing in IT Department for support purpose...</p>
+              <div class="d-flex gap-2 mt-2 flex-wrap">
+                <span class="badge bg-light text-dark border">PHP</span>
+                <span class="badge bg-light text-dark border">HTML</span>
+                <span class="badge bg-light text-dark border">CSS</span>
+								<span class="badge bg-light text-dark border">JAVASCRIPT</span>
+								<span class="badge bg-light text-dark border">TAILWIND</span>
+              </div>
+            </div>
+          </div>
+
+					 <div class="col-md-4">
+            <div class="project-item">
+              <div class="project-img-placeholder mb-3">
+                <i class="fas fa-globe"></i>
+                <span>EEG Website</span>
+              </div>
+              <h5 class="fw-semibold">Eagle Express Website</h5>
+              <p class="text-muted small">Created an Logistics Company Website</p>
+              <div class="d-flex gap-2 mt-2 flex-wrap">
+                <span class="badge bg-light text-dark border">PHP</span>
+                <span class="badge bg-light text-dark border">HTML</span>
+                <span class="badge bg-light text-dark border">CSS</span>
+								<span class="badge bg-light text-dark border">JAVASCRIPT</span>
+								<span class="badge bg-light text-dark border">TAILWIND</span>
+              </div>
+            </div>
+          </div>
+
+					<div class="col-md-4">
+            <div class="project-item">
+              <div class="project-img-placeholder mb-3">
+                <i class="fas fa-globe"></i>
+                <span>ITDepot Website</span>
+              </div>
+              <h5 class="fw-semibold">ITDepot Inc.</h5>
+              <p class="text-muted small">Created an IT Company Website</p>
+              <div class="d-flex gap-2 mt-2 flex-wrap">
+                <span class="badge bg-light text-dark border">PHP</span>
+                <span class="badge bg-light text-dark border">HTML</span>
+                <span class="badge bg-light text-dark border">CSS</span>
+								<span class="badge bg-light text-dark border">JAVASCRIPT</span>
+								<span class="badge bg-light text-dark border">TAILWIND</span>
+              </div>
+            </div>
+          </div>
+
+					<div class="col-md-4">
+            <div class="project-item">
+              <div class="project-img-placeholder mb-3">
+                <i class="fas fa-globe"></i>
+                <span>Isolutions Website</span>
+              </div>
+              <h5 class="fw-semibold">iSolutions International Inc.</h5>
+              <p class="text-muted small">Created an IT Company Website</p>
+              <div class="d-flex gap-2 mt-2 flex-wrap">
+                <span class="badge bg-light text-dark border">PHP</span>
+                <span class="badge bg-light text-dark border">HTML</span>
+                <span class="badge bg-light text-dark border">CSS</span>
+								<span class="badge bg-light text-dark border">JAVASCRIPT</span>
+								<span class="badge bg-light text-dark border">TAILWIND</span>
+              </div>
+            </div>
+          </div>
+
+					<div class="col-md-4">
+            <div class="project-item">
+              <div class="project-img-placeholder mb-3">
+                <i class="fas fa-globe"></i>
+                <span>Awards Cargo Website</span>
+              </div>
+              <h5 class="fw-semibold">Awards Cargo Agency Inc.</h5>
+              <p class="text-muted small">Created an Logistics Company Website</p>
+              <div class="d-flex gap-2 mt-2 flex-wrap">
+                <span class="badge bg-light text-dark border">PHP</span>
+                <span class="badge bg-light text-dark border">HTML</span>
+                <span class="badge bg-light text-dark border">CSS</span>
+								<span class="badge bg-light text-dark border">JAVASCRIPT</span>
+								<span class="badge bg-light text-dark border">TAILWIND</span>
+              </div>
+            </div>
+          </div>
+
+					<div class="col-md-4">
+            <div class="project-item">
+              <div class="project-img-placeholder mb-3">
+                <i class="fas fa-globe"></i>
+                <span>EMCS Website</span>
+              </div>
+              <h5 class="fw-semibold">EMCSgit remote add origin https://github.com/wrciar/Warren-Ciar-Portfolio-Laravel.git Philippines Inc.</h5>
+              <p class="text-muted small">Created an Logistics Company Website</p>
+              <div class="d-flex gap-2 mt-2 flex-wrap">
+                <span class="badge bg-light text-dark border">PHP</span>
+                <span class="badge bg-light text-dark border">HTML</span>
+                <span class="badge bg-light text-dark border">CSS</span>
+								<span class="badge bg-light text-dark border">JAVASCRIPT</span>
+								<span class="badge bg-light text-dark border">TAILWIND</span>
+              </div>
+            </div>
+          </div>
+
+					<div class="col-md-4">
+            <div class="project-item">
+              <div class="project-img-placeholder mb-3">
+                <i class="fas fa-globe"></i>
+                <span>B1Tech Service Website</span>
+              </div>
+              <h5 class="fw-semibold">B1Tech Services Inc.</h5>
+              <p class="text-muted small">Created an IT Company Website</p>
+              <div class="d-flex gap-2 mt-2 flex-wrap">
+                <span class="badge bg-light text-dark border">PHP</span>
+                <span class="badge bg-light text-dark border">HTML</span>
+                <span class="badge bg-light text-dark border">CSS</span>
+								<span class="badge bg-light text-dark border">JAVASCRIPT</span>
+								<span class="badge bg-light text-dark border">TAILWIND</span>
+              </div>
+            </div>
+          </div>
+
+					<div class="col-md-4">
+            <div class="project-item">
+              <div class="project-img-placeholder mb-3">
+                <i class="fas fa-globe"></i>
+                <span>Show & Tell Website</span>
+              </div>
+              <h5 class="fw-semibold">Show & Tell Ph.</h5>
+              <p class="text-muted small">Created an IT Company Website</p>
+              <div class="d-flex gap-2 mt-2 flex-wrap">
+                <span class="badge bg-light text-dark border">PHP</span>
+                <span class="badge bg-light text-dark border">HTML</span>
+                <span class="badge bg-light text-dark border">CSS</span>
+								<span class="badge bg-light text-dark border">JAVASCRIPT</span>
+								<span class="badge bg-light text-dark border">TAILWIND</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <p class="text-muted small mt-3 mb-0"><i class="fas fa-arrow-right me-1" style="color:#4f46e5;"></i> More projects on my GitHub</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== ABOUT ME – humble & professional ========== -->
+  <div class="row justify-content-center mb-5">
+    <div class="col-lg-10">
+      <div class="portfolio-card">
+        <h3 class="section-title"><i class="fas fa-user-astronaut"></i> About Me</h3>
+        <div class="row align-items-center">
+          <div class="col-md-7">
+            <p style="font-size: 1.05rem; line-height: 1.7; color: #1f2a44;">
+              I'm Warren — a developer who enjoys bridging the gap between frontend and backend. 
+              I have a solid foundation in PHP, Laravel, and modern JavaScript (Vue, Quasar, Node), 
+              and I'm continuously expanding my knowledge.
+            </p>
+            <p style="font-size: 1.05rem; line-height: 1.7; color: #1f2a44;">
+              I believe in writing clean, maintainable code and building tools that are both 
+              functional and a joy to use. Right now, I'm focused on deepening my Laravel and 
+              Vue skills, while exploring Quasar for cross-platform apps.
+            </p>
+            <div class="d-flex flex-wrap gap-3 mt-3">
+              <div><i class="fas fa-map-pin text-primary me-1"></i> Manila, PH</div>
+              <div><i class="fas fa-briefcase text-primary me-1"></i> Freelance / Remote</div>
+              <div><i class="fas fa-graduation-cap text-primary me-1"></i> Lifelong learner</div>
+            </div>
+          </div>
+          <div class="col-md-5 text-center mt-3 mt-md-0">
+            <div style="background: #f1f5fb; border-radius: 2rem; padding: 1.8rem 1.5rem; border: 1px solid #e3eaf5;">
+              <i class="fas fa-quote-left" style="color: #4f46e5; opacity: 0.5;"></i>
+              <p class="fst-italic text-secondary" style="font-size: 0.95rem; color: #1f2a44;">
+                “Progress over perfection — every line of code teaches me something new.”
+              </p>
+              <span class="badge bg-light text-primary px-3 py-2 rounded-pill border" style="background: #eef2ff !important;">
+                <i class="fab fa-laravel me-1"></i> 5+ Laravel projects
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== CONTACT ME ========== -->
+  <div id="contact" class="row justify-content-center mb-5">
+    <div class="col-lg-10">
+      <div class="portfolio-card">
+        <h3 class="section-title"><i class="fas fa-envelope"></i> Contact Me</h3>
+        <div class="row g-4">
+          <div class="col-md-6">
+            <p class="text-muted" style="color: #2d3a5a;">I'm always open to interesting collaborations, questions, or just a friendly chat.</p>
+            <div class="d-flex flex-column gap-3">
+              <div><i class="fas fa-envelope me-2" style="color:#4f46e5; width: 24px;"></i> warren.c@laravel.dev</div>
+              <div><i class="fab fa-github me-2" style="color:#4f46e5; width: 24px;"></i> github.com/warrenciar</div>
+  
+              <div><i class="fab fa-linkedin me-2" style="color:#4f46e5; width: 24px;"></i> linkedin.com/in/warrenciar</div>
+            </div>
+            <hr class="my-3" style="border-color: #e2e8f0;">
+            <div class="footer-social">
+              <a href="#"><i class="fab fa-github"></i></a>
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+ 
+              <a href="#"><i class="fab fa-dev"></i></a>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <form class="contact-form">
+              <div class="mb-3">
+                <label class="form-label fw-semibold small text-secondary">Your name</label>
+                <input type="text" class="form-control" placeholder="e.g. Warren" value="Warren">
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold small text-secondary">Email address</label>
+                <input type="email" class="form-control" placeholder="hello@example.com" value="hello@example.com">
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold small text-secondary">Message</label>
+                <textarea class="form-control" rows="2" placeholder="Your message..." style="border-radius: 1.25rem; background:#fafcff;">I'd love to work with you!</textarea>
+              </div>
+              <button type="submit" class="btn btn-primary-custom w-100">
+                <i class="fas fa-paper-plane me-1"></i> Send message
+              </button>
+              <p class="text-muted small mt-2 mb-0"><i class="fas fa-shield-alt me-1"></i> I'll reply within 24h.</p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- footer -->
+  <footer class="text-center text-muted small pt-3 border-top" style="border-color: #e2e8f0 !important; color: #64748b;">
+    <span>© 2026 Warren Ciar — Built with <i class="fas fa-heart" style="color:#4f46e5;"></i> &amp; Laravel</span>
+  </footer>
+
+</div>
+
+<!-- Bootstrap JS (optional) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
